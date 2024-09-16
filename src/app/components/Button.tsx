@@ -1,22 +1,26 @@
 "use client";
 
-import { MouseEvent, useRef, useState } from "react";
+import { ButtonHTMLAttributes, MouseEvent, useRef, useState } from "react";
 
 
-type Props = {
+interface Props extends ButtonHTMLAttributes<HTMLButtonElement> {
   children?: React.ReactNode;
+  openModal?: () => void;
 };
 
-export const Button: React.FC<Props> = ({children}) => {
+export const Button = ({children, openModal}: Props) => {
   
-
   const buttonRef = useRef<HTMLButtonElement>(null)
   const rippleRef = useRef<HTMLSpanElement>(null)
 
   const [active, setActive] = useState(Boolean);
-  
 
   const handleClick = (event: MouseEvent<HTMLButtonElement>) =>{
+
+    if(openModal){
+      openModal();
+    }
+
     const button = buttonRef.current;
     const ripple = rippleRef.current;
 
