@@ -16,6 +16,23 @@ body {
 }
 
 @layer utilities {
+  input[type=number]::-webkit-inner-spin-button, input[type=number]::-webkit-outer-spin-button{
+    -webkit-appearance: none;
+    margin: 0;
+  }
+
+  input[type=number] { 
+    -moz-appearance:textfield; 
+  }
+
+  input:checked + span{
+    background-color: #dc4f4f;
+  }
+  
+  input:checked + span::before{
+    transform: translateX(26px);
+  }
+
   button.active{
     @apply opacity-100 font-extrabold
   }

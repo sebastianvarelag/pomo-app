@@ -6,6 +6,7 @@ import { SettingsIcon } from "../../../public/icons/SettingsIcon"
 import { SkipIcon } from "../../../public/icons/SkipIcon"
 import { Button } from "./Button"
 import { Modal } from "./Modal"
+import { ModalSettingsContent } from "./ModalSettingsContent";
 
 export const Controls = () => {
 
@@ -28,8 +29,8 @@ export const Controls = () => {
           <SkipIcon/>
         </Button>
       </div>
-      <Modal isVisible={showModal} onClose={() => setShowModal(false)}>
-        <h1>Hola</h1>
+      <Modal isVisible={showModal} title="Settings" onClose={() => setShowModal(false)}>
+        <ModalSettingsContent/>
       </Modal>
     </div>
   )

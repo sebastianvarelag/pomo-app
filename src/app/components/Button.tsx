@@ -5,10 +5,13 @@ import { ButtonHTMLAttributes, MouseEvent, useRef, useState } from "react";
 
 interface Props extends ButtonHTMLAttributes<HTMLButtonElement> {
   children?: React.ReactNode;
+  backgroundColor?: string;
+  paddingX?: string;
+  height?: string;
   openModal?: () => void;
 };
 
-export const Button = ({children, openModal}: Props) => {
+export const Button = ({children, backgroundColor, paddingX, height, openModal}: Props) => {
   
   const buttonRef = useRef<HTMLButtonElement>(null)
   const rippleRef = useRef<HTMLSpanElement>(null)
@@ -44,7 +47,7 @@ export const Button = ({children, openModal}: Props) => {
   return (
     <button 
       ref={buttonRef}
-      className={`h-16 bg-white/15 px-6 hover:opacity-70 transition-opacity delay-200 relative overflow-hidden`}
+      className={`${height ? 'h-' + height : 'h-12'} ${backgroundColor ? 'bg-['+backgroundColor+']' : 'bg-white/15'} ${paddingX ? 'px-'+ paddingX : 'px-6'} hover:opacity-70 relative overflow-hidden`}
       onClick={handleClick}
       >
       {children}

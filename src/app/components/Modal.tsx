@@ -1,12 +1,13 @@
 import { MouseEvent } from "react";
 
 type modalProps ={
+  children: React.ReactNode;
+  title: string;
   isVisible: boolean;
   onClose: () => void;
-  children: React.ReactNode;
 }
 
-export const Modal = ({isVisible, onClose, children}: modalProps) => {
+export const Modal = ({isVisible, onClose, children, title}: modalProps) => {
 
   if(!isVisible) return null;
 
@@ -21,15 +22,18 @@ export const Modal = ({isVisible, onClose, children}: modalProps) => {
       id="wrapper"
       onClick={handleClose}
       >
-      <div className='w-[600px] flex flex-col'>
+      <div className='w-[400px] flex flex-col'>
         <button 
-          className='text-white text-xl place-self-end'
+          className='text-gray-500 font-extrabold text-xl place-self-end absolute mr-3 mt-2'
           onClick={() => onClose()}
         >
           X
         </button>
         <div className='bg-white p-2 rounded text-black'>
-          {children}
+          <h2 className="text-xl text-gray-500 font-bold pb-2 ml-2 mt-1 border-b-2 border-gray-300">{title}</h2>
+          <div className="p-6">
+            {children}
+          </div>
         </div>
       </div>
     </div>
