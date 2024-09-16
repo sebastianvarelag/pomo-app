@@ -19,6 +19,7 @@ export const Button = ({children, backgroundColor, paddingX, height, openModal}:
   const [active, setActive] = useState(Boolean);
 
   const handleClick = (event: MouseEvent<HTMLButtonElement>) =>{
+    event.preventDefault();
 
     if(openModal){
       openModal();
@@ -47,7 +48,7 @@ export const Button = ({children, backgroundColor, paddingX, height, openModal}:
   return (
     <button 
       ref={buttonRef}
-      className={`${height ? 'h-' + height : 'h-12'} ${backgroundColor ? 'bg-['+backgroundColor+']' : 'bg-white/15'} ${paddingX ? 'px-'+ paddingX : 'px-6'} hover:opacity-70 relative overflow-hidden`}
+      className={`${height ? 'h-' + height : 'h-16'} ${backgroundColor ? 'bg-['+backgroundColor+']' : 'bg-white/15'} ${paddingX ? 'px-'+ paddingX : 'px-6'} hover:opacity-70 relative overflow-hidden`}
       onClick={handleClick}
       >
       {children}
