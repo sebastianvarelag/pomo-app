@@ -1,3 +1,4 @@
+import { Modal } from "./components/Modal";
 import { Timer } from "./components/Timer";
 
 
@@ -9,6 +10,7 @@ export default function Home() {
         <main className="w-full h-full">
           <Timer/>
         </main>
+        <Modal/>
       </div>
     </>
   );
