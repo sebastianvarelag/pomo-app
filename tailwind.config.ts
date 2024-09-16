@@ -23,17 +23,19 @@ const config: Config = {
       keyframes:{
         rippleEffect: {
           "0%": {
-            transform: "scale(0)",
-            opacity: "0.5",
+            width: "0px",
+            height: "0px",
+            opacity: "0.5"
           },
           "100%": {
-            transform: "scale(2)",
-            opacity: "0",
+            width: "300px",
+            height: "300px",
+            opacity: "0"
           },
         }
       },
       animation:{
-        "rippleAnim": "rippleEffect 0.9s ease infinite"
+        "rippleAnim": "rippleEffect .9s linear infinite"
       }
     },
   },

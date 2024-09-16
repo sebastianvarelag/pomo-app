@@ -21,11 +21,10 @@ export const Button: React.FC<Props> = ({children}) => {
     const ripple = rippleRef.current;
 
     if(button){
-      const buttonRect = button.getBoundingClientRect();
-      const {left, top} = buttonRect;
+      const {offsetTop, offsetLeft} = button;
       
-      const leftPos = event.clientX - left;
-      const topPos = event.clientY - top;
+      const leftPos = event.clientX - offsetLeft;
+      const topPos = event.clientY - offsetTop;
 
       if(ripple){
         ripple.style.left = leftPos + "px";
@@ -47,7 +46,7 @@ export const Button: React.FC<Props> = ({children}) => {
       {children}
       <span 
         ref={rippleRef}
-        className={`w-[60px] h-[60px] bg-white absolute rounded-[50%] scale-0${active ? ' animate-rippleAnim' : ''}`}
+        className={`absolute bg-white -translate-x-1/2 -translate-y-1/2 pointer-events-none rounded-[50%]${active ? ' animate-rippleAnim' : ''}`}
         ></span>
     </button>
   )
