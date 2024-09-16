@@ -6,7 +6,7 @@
   --background: linear-gradient(90deg, #771D32, #E65758);
   --background-short-break: linear-gradient(90deg, #1572A1, #9AD0EC);
   --background-long-break: linear-gradient(90deg, #436850, #ADBC9F);
-  --foreground: #d9d9d92b;
+  --foreground: #d9d9d914;
   --primary-color: #fff;
 }
 
@@ -16,7 +16,7 @@ body {
 }
 
 @layer utilities {
-  header button.active{
+  button.active{
     @apply opacity-100 font-extrabold
   }
 
