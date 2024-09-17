@@ -1,7 +1,26 @@
-import { Button } from "./Button"
+import { MouseEvent, useRef, useState } from "react"
 import { Switch } from "./Switch"
+import { rippleEff } from "./ui/"
 
 export const ModalSettingsContent = () => {
+
+  const buttonRef = useRef<HTMLButtonElement>(null)
+  const rippleRef = useRef<HTMLSpanElement>(null)
+
+  const [activeButton, setActiveButton] = useState(false)
+
+  const handleClickOk = (event: MouseEvent<HTMLButtonElement>) =>{
+    event.preventDefault();
+
+    const ripple = rippleEff({buttonRef, rippleRef, event});
+
+    if(ripple){
+      setActiveButton(true)
+      setTimeout(() => {
+        setActiveButton(false);
+      }, 600);
+    }
+  }
 
   return (
     <div>
@@ -45,9 +64,17 @@ export const ModalSettingsContent = () => {
           <Switch/>
         </div>
         <div className="flex justify-end border-t-2 border-gray-300 mt-4 pt-4 text-white font-bold">
-          <Button backgroundColor="#dc4f4f" height="12" paddingX="4">
-            <span>OK</span>
-          </Button>
+        <button 
+          ref={buttonRef}
+          className={`h-12 bg-[#dc4f4f] px-6 hover:opacity-70 relative overflow-hidden`}
+          onClick={handleClickOk}
+          >
+            OK
+          <span 
+            ref={rippleRef}
+            className={`absolute bg-white -translate-x-1/2 -translate-y-1/2 pointer-events-none rounded-[50%]${activeButton ? ' animate-rippleAnim' : ''}`}
+            ></span>
+        </button>
         </div>
       </form>
     </div>

@@ -1,17 +1,16 @@
 "use client";
 
 import { ButtonHTMLAttributes, MouseEvent, useRef, useState } from "react";
+import { rippleEff } from "./ui/";
 
 
 interface Props extends ButtonHTMLAttributes<HTMLButtonElement> {
   children?: React.ReactNode;
-  backgroundColor?: string;
-  paddingX?: string;
-  height?: string;
+  bgColor?: string;
   openModal?: () => void;
 };
 
-export const Button = ({children, backgroundColor, paddingX, height, openModal}: Props) => {
+export const Button = ({children, openModal}: Props) => {
   
   const buttonRef = useRef<HTMLButtonElement>(null)
   const rippleRef = useRef<HTMLSpanElement>(null)
@@ -24,34 +23,24 @@ export const Button = ({children, backgroundColor, paddingX, height, openModal}:
     if(openModal){
       openModal();
     }
+    
+    const ripple = rippleEff({buttonRef, rippleRef, event});
 
-    const button = buttonRef.current;
-    const ripple = rippleRef.current;
-
-    if(button){
-      const {offsetTop, offsetLeft} = button;
-      
-      const leftPos = event.clientX - offsetLeft;
-      const topPos = event.clientY - offsetTop;
-
-      if(ripple){
-        ripple.style.left = leftPos + "px";
-        ripple.style.top = topPos + "px";
-        setActive(true)
-        setTimeout(() => {
-          setActive(false);
-        }, 600);
-      }
+    if(ripple){
+      setActive(true)
+      setTimeout(() => {
+        setActive(false);
+      }, 600);
     }
   }
   
   return (
     <button 
       ref={buttonRef}
-      className={`${height ? 'h-' + height : 'h-16'} ${backgroundColor ? 'bg-['+backgroundColor+']' : 'bg-white/15'} ${paddingX ? 'px-'+ paddingX : 'px-6'} hover:opacity-70 relative overflow-hidden`}
+      className={`h-16 bg-white/15 px-6 hover:opacity-70 relative overflow-hidden`}
       onClick={handleClick}
       >
-      {children}
+        {children}
       <span 
         ref={rippleRef}
         className={`absolute bg-white -translate-x-1/2 -translate-y-1/2 pointer-events-none rounded-[50%]${active ? ' animate-rippleAnim' : ''}`}
