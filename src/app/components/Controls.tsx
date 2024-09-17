@@ -7,8 +7,12 @@ import { SkipIcon } from "../../../public/icons/SkipIcon"
 import { Button } from "./Button"
 import { Modal } from "./Modal"
 import { ModalSettingsContent } from "./ModalSettingsContent";
+import { PlayIcon } from "../../../public/icons/PlayIcon";
+import { useAppSelector } from "@/redux/hooks";
 
 export const Controls = () => {
+
+  const {isRunning} = useAppSelector(state => state.timer);
 
   const [showModal, setShowModal] = useState(false)
 
@@ -22,9 +26,16 @@ export const Controls = () => {
         <Button openModal={openModal}>
           <SettingsIcon/>
         </Button>
-        <Button>
-          <PauseIcon/>
-        </Button>
+        
+        {isRunning ? 
+                  <Button>
+                    <PauseIcon/>
+                  </Button>
+                  :
+                  <Button>
+                    <PlayIcon/>
+                  </Button>
+        }
         <Button>
           <SkipIcon/>
         </Button>
