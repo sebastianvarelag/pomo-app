@@ -1,16 +1,15 @@
-import { modes } from '@/app/enum';
-import { createSlice } from '@reduxjs/toolkit'
+import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 
 interface modesPayload {
   payload: {
-    mode: modes;
+    mode: 'POMODORO' | 'SHORT_BREAK' | 'LONG_BREAK';
     sessionLength: number;
   }
 }
 
 const initialState = {
-  mode: "POMODORO",
-  isRunning: false,
+  mode: 'POMODORO',
+  isRunning: true,
   longBreakInterval: 4,
   autoPomodoro: false,
   autoBreak: false,
@@ -19,7 +18,7 @@ const initialState = {
     "POMODORO":{
       id: "POMODORO",
       label: "Pomodoro",
-      sessionLength: 25
+      sessionLength: 1
     },
     "SHORT_BREAK":{
       id: "SHORT_BREAK",
@@ -44,8 +43,8 @@ const timerSlice = createSlice({
     toggleRunning: (state) => {
       state.isRunning = !state.isRunning;
     },
-    updateTimeMode: (state, {payload}: modesPayload) =>{
-      const {mode, sessionLength} = payload;
+    updateTimeMode: (state, {payload}: PayloadAction<modesPayload>) => {
+      const { mode, sessionLength } = payload.payload;
       state.modes[mode].sessionLength = sessionLength;
     },
     toggleAutoPomo: (state) => {
@@ -54,10 +53,10 @@ const timerSlice = createSlice({
     toggleAutoBreak: (state) => {
       state.autoBreak = !state.autoBreak;
     },
-    setLongBreakInterval: (state, action) =>{
+    setLongBreakInterval: (state, action: PayloadAction<number>) =>{
       state.longBreakInterval = action.payload;
     },
-    setTotalTimeFocusSession: (state, action) =>{
+    setTotalTimeFocusSession: (state, action: PayloadAction<number>) =>{
       state.totalTimeFocusSession += action.payload;
     }
   }
