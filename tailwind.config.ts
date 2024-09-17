@@ -14,7 +14,7 @@ const config: Config = {
         "lg": "960px",
         "xl": "1100px",
       },
-      colors: {
+      backgroundImage: {
         backgroundPomo: "var(--background)",
         backgroundShort: "var(--background-short-break)",
         backgroundLong: "var(--background-long-break)",
@@ -32,7 +32,7 @@ const config: Config = {
             height: "300px",
             opacity: "0"
           },
-        }
+        },
       },
       animation:{
         "rippleAnim": "rippleEffect .9s linear infinite"
