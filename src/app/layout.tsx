@@ -1,6 +1,8 @@
-import type { Metadata } from "next";
 import "./globals.css";
 import { KoHo } from 'next/font/google'
+import type { Metadata } from "next";
+import { StoreProvider } from "@/redux/StoreProvider";
+
 
 export const metadata: Metadata = {
   title: "PomoApp",
@@ -18,10 +20,12 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={koho.className}>
-      <body>
-        {children}
-      </body>
-    </html>
+    <StoreProvider>  
+      <html lang="en" className={koho.className}>
+        <body>
+          {children}
+        </body>
+      </html>
+    </StoreProvider>
   );
 }
