@@ -8,11 +8,13 @@ import { Button } from "./Button"
 import { Modal } from "./Modal"
 import { ModalSettingsContent } from "./ModalSettingsContent";
 import { PlayIcon } from "../../../public/icons/PlayIcon";
-import { useAppSelector } from "@/redux/hooks";
 
-export const Controls = () => {
+interface controlsProps {
+  ticking: boolean;
+  toggleTime: () => void;
+}
 
-  const {isRunning} = useAppSelector(state => state.timer);
+export const Controls = ({ticking, toggleTime}: controlsProps) => {
 
   const [showModal, setShowModal] = useState(false)
 
@@ -27,15 +29,15 @@ export const Controls = () => {
           <SettingsIcon/>
         </Button>
         
-        {isRunning ? 
-                  <Button>
-                    <PauseIcon/>
-                  </Button>
-                  :
-                  <Button>
-                    <PlayIcon/>
-                  </Button>
-        }
+        <Button toggleTime={toggleTime}>
+          {
+            ticking
+              ? 
+              <PauseIcon/>
+              : 
+              <PlayIcon/>
+          }
+          </Button>
         <Button>
           <SkipIcon/>
         </Button>

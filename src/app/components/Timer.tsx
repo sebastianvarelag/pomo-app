@@ -3,22 +3,24 @@ import { Controls } from "./Controls"
 import { Menu } from "./Menu"
 import useCountdown from "../utils/useCountdown";
 import { secondsToMinutes } from "../helpers/helpers";
-import { useEffect } from "react";
+import { useCallback } from "react";
 
 export const Timer = () => {
 
 
-  const { modes, mode, isRunning } = useAppSelector(state => state.timer);
+  const { modes, mode } = useAppSelector(state => state.timer);
   
-  const { ticking, progress, timeLeft, start} = useCountdown(modes[mode as keyof typeof modes].sessionLength);
-  
-  useEffect(() => {
-    if(isRunning){
-      start();
-    }
-  }, [isRunning])
-  
+  const { ticking, progress, timeLeft, start, stop} = useCountdown(modes[mode as keyof typeof modes].sessionLength);
+
   const {minutesString, secondsString } = secondsToMinutes(timeLeft);
+
+  const toggleTime = useCallback(() =>{
+    if(!ticking){
+      start();
+    } else {
+      stop();
+    }
+  }, [ticking, start, stop])
 
   return (
     <div className="flex flex-col justify-center w-full h-full items-center sm:gap-16 md:gap-36">
@@ -34,7 +36,7 @@ export const Timer = () => {
           <circle r="38.9" cx="45" cy="45" fill="none" stroke="white" strokeLinecap="round" strokeWidth={2} strokeOpacity={1} strokeDasharray={244.4} strokeDashoffset={244.4 - (244.4 * progress)} transform="matrix(0.952228, 0, 0, 0.951022, 2.440749, 2.269741)"></circle>
         </svg>
       </div>
-      <Controls/>
+      <Controls ticking={ticking} toggleTime={toggleTime}/>
     </div>
   )
 }

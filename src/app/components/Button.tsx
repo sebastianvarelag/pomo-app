@@ -8,9 +8,10 @@ interface Props extends ButtonHTMLAttributes<HTMLButtonElement> {
   children?: React.ReactNode;
   bgColor?: string;
   openModal?: () => void;
+  toggleTime?: () => void;
 };
 
-export const Button = ({children, openModal}: Props) => {
+export const Button = ({children, openModal, toggleTime}: Props) => {
   
   const buttonRef = useRef<HTMLButtonElement>(null)
   const rippleRef = useRef<HTMLSpanElement>(null)
@@ -24,6 +25,10 @@ export const Button = ({children, openModal}: Props) => {
       openModal();
     }
     
+    if(toggleTime){
+      toggleTime();
+    }
+
     const ripple = rippleEff({buttonRef, rippleRef, event});
 
     if(ripple){

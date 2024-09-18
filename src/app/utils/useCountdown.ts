@@ -40,7 +40,10 @@ export default function useCountdown(minutes : number){
 
   const start = useCallback(() =>{
     setTicking(true);
-    setProgress(0); // Reset progress every start
+  }, [])
+  
+  const stop = useCallback(() =>{
+    setTicking(false);
   }, [])
 
   return{
@@ -48,5 +51,6 @@ export default function useCountdown(minutes : number){
     progress: progress / time,
     ticking,
     start,
+    stop,
   }
 }

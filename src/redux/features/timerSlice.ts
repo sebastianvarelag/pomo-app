@@ -9,7 +9,6 @@ interface modesPayload {
 
 const initialState = {
   mode: 'POMODORO',
-  isRunning: true,
   longBreakInterval: 4,
   autoPomodoro: false,
   autoBreak: false,
@@ -40,9 +39,6 @@ const timerSlice = createSlice({
     setMode: (state, {payload}) =>{
       state.mode = payload;
     },
-    toggleRunning: (state) => {
-      state.isRunning = !state.isRunning;
-    },
     updateTimeMode: (state, {payload}: PayloadAction<modesPayload>) => {
       const { mode, sessionLength } = payload.payload;
       state.modes[mode].sessionLength = sessionLength;
@@ -64,7 +60,6 @@ const timerSlice = createSlice({
 
 export const {
   setMode,
-  toggleRunning,
   updateTimeMode,
   toggleAutoPomo,
   toggleAutoBreak,
