@@ -9,9 +9,11 @@ interface modesPayload {
 
 const initialState = {
   mode: 'POMODORO',
-  longBreakInterval: 4,
   autoPomodoro: false,
   autoBreak: false,
+  round: 1,
+  roundSessionInterval: 1,
+  longBreakInterval: 2,
   totalTimeFocusSession: 0,
   modes: {
     "POMODORO":{
@@ -43,6 +45,15 @@ const timerSlice = createSlice({
       const { mode, sessionLength } = payload.payload;
       state.modes[mode].sessionLength = sessionLength;
     },
+    incrementRound: (state) =>{
+      state.round += 1;
+    },
+    incrementTotalRoundSessionInterval: (state) => {
+      state.roundSessionInterval += 1;
+    },
+    resetRoundSessionInterval: (state) => {
+      state.roundSessionInterval = 1;
+    },
     toggleAutoPomo: (state) => {
       state.autoPomodoro = !state.autoPomodoro;
     },
@@ -59,12 +70,15 @@ const timerSlice = createSlice({
 });
 
 export const {
-  setMode,
-  updateTimeMode,
-  toggleAutoPomo,
-  toggleAutoBreak,
   setLongBreakInterval,
+  setMode,
+  incrementRound,
+  incrementTotalRoundSessionInterval,
+  resetRoundSessionInterval,
   setTotalTimeFocusSession,
+  toggleAutoBreak,
+  toggleAutoPomo,
+  updateTimeMode,
 } = timerSlice.actions;
 
 export default timerSlice.reducer
