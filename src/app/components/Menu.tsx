@@ -1,8 +1,11 @@
 "use client";
 
-import { setMode } from "@/redux/features/timerSlice";
-import { useAppDispatch, useAppSelector } from "@/redux/hooks";
+import { useAppSelector } from "@/redux/hooks";
 import { useEffect, useState } from "react"
+
+type propsMenu = {
+  onChangeMode: (mode: string) => void
+}
 
 type propsButton = {
   children: React.ReactNode;
@@ -10,10 +13,9 @@ type propsButton = {
   onClick?: (e: React.MouseEvent<HTMLButtonElement>, mode: string) => void;
 }
 
-export const Menu = () => {
+export const Menu = ({onChangeMode}: propsMenu) => {
 
   const { modes, mode } = useAppSelector(state => state.timer)
-  const dispatch = useAppDispatch();
 
   const [dimension, setDimension] = useState({
     width: 0, left: 0
@@ -30,14 +32,15 @@ export const Menu = () => {
     }
   };
 
-  const handleClick = (event: React.MouseEvent<HTMLButtonElement>, mode: string): void => {
+  const handleClick = (event: React.MouseEvent<HTMLButtonElement>, modeSelected: string): void => {
     const { offsetWidth, offsetLeft } = event.currentTarget;
     setDimension({
       width: offsetWidth,
       left: offsetLeft
     });
 
-    dispatch(setMode(mode));
+    onChangeMode(modeSelected);
+
   }
 
   useEffect(() => {
@@ -47,7 +50,7 @@ export const Menu = () => {
 
   useEffect(() => {
     getDimension();
-  }, []);
+  }, [onChangeMode]);
 
   const ButtonMenu = ({ children, active, onClick }: propsButton) => {
     return (
@@ -63,7 +66,7 @@ export const Menu = () => {
   }
 
   return (
-    <div className="flex justify-center w-full min-w-fit h-20 relative">
+    <div className="flex justify-center w-full min-w-fit h-20 relative sm:mb-16 md:mb-36">
       <ul className="flex text-md md:text-xl bg-white/10 relative">
         {
           Object.values(modes).map(({ id, label }) =>
