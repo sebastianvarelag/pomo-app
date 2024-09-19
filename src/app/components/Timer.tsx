@@ -10,35 +10,35 @@ import { useAudioPlayer } from "@/utils/sound";
 export const Timer = () => {
 
 
-  const { modes, mode, round, roundSessionInterval, longBreakInterval } = useAppSelector(state => state.timer);
+  const { modes, mode, round, roundSessionInterval, longBreakInterval, autoPomodoro, autoBreak } = useAppSelector(state => state.timer);
   const dispatch = useAppDispatch();
 
-  const minutesMode = modes[mode as keyof typeof modes].sessionLength
+  const minutesMode = modes[mode as keyof typeof modes].sessionLength;
 
   const tickingSound = useAudioPlayer('/sounds/ticking.mp3', true);
   const alarmSound = useAudioPlayer('/sounds/alarm.mp3', false);
-  
-  const { ticking, progress, timeLeft, startTicking, stopTicking, resetTicking} = useCountdown({
+
+  const { ticking, progress, timeLeft, startTicking, stopTicking, resetTicking } = useCountdown({
     minutes: minutesMode,
-    onInit: () =>{
-      if(mode === 'POMODORO') tickingSound.play();
+    onInit: () => {
+      if (mode === 'POMODORO') tickingSound.play();
     },
-    onStop: () =>{
-      if(mode === 'POMODORO') tickingSound.stop();
+    onStop: () => {
+      if (mode === 'POMODORO') tickingSound.stop();
     },
-    onFinish: () => onFinishSessionMode(),
+    onFinish: () => {
+      onFinishSessionMode();
+    },
   });
 
   useEffect(() => {
     resetTicking();
+  }, [minutesMode, resetTicking]);
 
-  }, [minutesMode, resetTicking])
-  
-  const {minutesString, secondsString } = secondsToMinutes(timeLeft);
+  const { minutesString, secondsString } = secondsToMinutes(timeLeft);
 
-  const onFinishSessionMode = () =>{
-    nextMode();
-    switch(mode){
+  const onFinishSessionMode = () => {
+    switch (mode) {
       case "POMODORO":
         tickingSound.stop();
         alarmSound.play();
@@ -46,55 +46,59 @@ export const Timer = () => {
         break;
       case "SHORT_BREAK":
         alarmSound.play();
-        dispatch(incrementTotalRoundSessionInterval())
+        dispatch(incrementTotalRoundSessionInterval());
         break;
       case "LONG_BREAK":
         alarmSound.play();
         dispatch(resetRoundSessionInterval());
         break;
     }
-  }
+    nextMode(); 
+  };
 
-  const toggleTime = useCallback(() =>{
-    if(!ticking){
+  const toggleTime = useCallback(() => {
+    if (!ticking) {
       startTicking();
     } else {
       stopTicking();
     }
-  }, [ticking, startTicking, stopTicking])
+  }, [ticking, startTicking, stopTicking]);
 
-  const jumpTo = useCallback((id:string) =>{
+  const jumpTo = useCallback((id: string) => {
     resetTicking();
-    dispatch(setMode(id))
+    dispatch(setMode(id));
   }, [dispatch, resetTicking]);
 
-  const nextMode = useCallback((modeSelected?: string) =>{
-    switch(mode){
-      case "SHORT_BREAK":
-      case "LONG_BREAK":
-        if(modeSelected !== undefined){
-          jumpTo(modeSelected)
-        }else{
-          jumpTo("POMODORO");
-        }
-        break;
-      case "POMODORO":
-        if(modeSelected !== undefined){
-          jumpTo(modeSelected)
-        }else{
-          if(roundSessionInterval === longBreakInterval){
+  const nextMode = useCallback((modeSelected?: string) => {
+    if (modeSelected !== undefined) {
+      jumpTo(modeSelected);
+    } else {
+      switch (mode) {
+        case "POMODORO":
+          if (roundSessionInterval === longBreakInterval) {
             jumpTo("LONG_BREAK");
-          }else{
+          } else {
             jumpTo("SHORT_BREAK");
           }
-        }
-        break;
-      default:
-        alert('error')
-        break;
+          break;
+        case "SHORT_BREAK":
+        case "LONG_BREAK":
+          jumpTo("POMODORO");
+          break;
+        default:
+          alert('error');
+          break;
+      }
     }
-  }, [jumpTo, mode, longBreakInterval, roundSessionInterval])
+  }, [jumpTo, mode, longBreakInterval, roundSessionInterval]);
 
+  useEffect(() => {
+    if (mode === "POMODORO" && autoPomodoro) {
+      startTicking();
+    } else if ((mode === "SHORT_BREAK" || mode === "LONG_BREAK") && autoBreak) {
+      startTicking();
+    }
+  }, [mode, autoPomodoro, autoBreak, startTicking]);
 
 
   return (
