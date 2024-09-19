@@ -48,4 +48,8 @@ body {
   circle{
     transition: stroke-dashoffset .2s linear;
   }
+
+  .disabled-button{
+    @apply cursor-not-allowed bg-gray-400
+  }
 }

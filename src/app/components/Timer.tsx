@@ -3,7 +3,7 @@ import { Controls } from "./Controls"
 import { Menu } from "./Menu"
 import useCountdown from "../../utils/useCountdown";
 import { secondsToMinutes } from "../../helpers/helpers";
-import { useCallback } from "react";
+import { useCallback, useEffect } from "react";
 import { incrementRound, incrementTotalRoundSessionInterval, resetRoundSessionInterval, setMode } from "@/redux/features/timerSlice";
 import { useAudioPlayer } from "@/utils/sound";
 
@@ -16,9 +16,8 @@ export const Timer = () => {
   const minutesMode = modes[mode as keyof typeof modes].sessionLength
 
   const tickingSound = useAudioPlayer('/sounds/ticking.mp3', true);
-  
   const alarmSound = useAudioPlayer('/sounds/alarm.mp3', false);
-
+  
   const { ticking, progress, timeLeft, startTicking, stopTicking, resetTicking} = useCountdown({
     minutes: minutesMode,
     onInit: () =>{
@@ -30,6 +29,11 @@ export const Timer = () => {
     onFinish: () => onFinishSessionMode(),
   });
 
+  useEffect(() => {
+    resetTicking();
+
+  }, [minutesMode, resetTicking])
+  
   const {minutesString, secondsString } = secondsToMinutes(timeLeft);
 
   const onFinishSessionMode = () =>{
@@ -98,9 +102,9 @@ export const Timer = () => {
       <Menu onChangeMode={nextMode}/>
       <div className="flex justify-center items-center min-w-[500px] min-h-[500px] bg-white/10 scale-50 sm:scale-75 md:scale-100 border-8 border-white/30 rounded-full relative sm:mb-16 md:mb-36">
           <div className="flex justify-center items-center text-9xl select-none">
-            <span className="w-[160px] text-center">{minutesString}</span>
+            <span className="min-w-[160px] max-w-fit text-center">{minutesString}</span>
             <span>:</span>
-            <span className="w-[160px] text-center">{secondsString}</span>
+            <span className="min-w-[160px] max-w-fit text-center">{secondsString}</span>
           </div>
           <svg className="absolute rotate-[270deg]" viewBox="0 0 90 90" height="600px" width="600px">
           <defs></defs>

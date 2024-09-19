@@ -16,9 +16,14 @@ interface controlsProps {
 
 export const Controls = ({ticking, toggleTime}: controlsProps) => {
   const [showModal, setShowModal] = useState(false)
+  const [showModalConfirm, setShowModalConfirm] = useState(false)
 
   const openModal = () =>{
     setShowModal(true)
+  }
+
+  const openModalConfirm = () =>{
+    setShowModalConfirm(true)
   }
 
   return (
@@ -37,12 +42,16 @@ export const Controls = ({ticking, toggleTime}: controlsProps) => {
               <PlayIcon/>
           }
           </Button>
-        <Button>
+        <Button openModal={openModalConfirm}>
           <SkipIcon/>
         </Button>
       </div>
       <Modal isVisible={showModal} title="Settings" onClose={() => setShowModal(false)}>
-        <ModalSettingsContent/>
+        <ModalSettingsContent onClose={() => setShowModal(false)}/>
+      </Modal>
+
+      <Modal isVisible={showModalConfirm} title="Are you sure?" onClose={() => setShowModalConfirm(false)}>
+        <h1>si</h1>
       </Modal>
     </div>
   )
