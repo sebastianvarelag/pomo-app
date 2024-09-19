@@ -77,10 +77,10 @@ export const Timer = () => {
   const onFinishSessionMode = () => {
     switch (mode) {
       case "POMODORO":
-        dispatch(incrementRound());
+          dispatch(incrementRound());
         break;
         case "SHORT_BREAK":
-        dispatch(incrementTotalRoundSessionInterval());
+          dispatch(incrementTotalRoundSessionInterval());
         break;
         case "LONG_BREAK":
           dispatch(resetRoundSessionInterval());
@@ -93,15 +93,6 @@ export const Timer = () => {
     if(!skip) alarmSound.play();
     nextMode(); 
   };
-
-
-  useEffect(() => {
-    if (mode === "POMODORO" && autoPomodoro) {
-      startTicking();
-    } else if ((mode === "SHORT_BREAK" || mode === "LONG_BREAK") && autoBreak) {
-      startTicking();
-    }
-  }, [mode, autoPomodoro, autoBreak, startTicking]);
 
   useEffect(() => {
     if (skip === null) {
@@ -121,6 +112,12 @@ export const Timer = () => {
     resetTicking();
     tickingSound.stop();
   }, [minutesMode, resetTicking]);
+
+  useEffect(() => {
+    if (!ticking && (mode === "POMODORO" && autoPomodoro || (mode === "SHORT_BREAK" || mode === "LONG_BREAK") && autoBreak)) {
+      startTicking();
+    }
+  }, [mode, autoPomodoro, autoBreak]);
 
   return (
     <div className="flex flex-col justify-center w-full h-full items-center">
