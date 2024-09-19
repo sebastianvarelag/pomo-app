@@ -50,12 +50,12 @@ export const ModalSettingsContent = ({onClose}: propsModal) => {
   }
 
   const handleChangeInput: ChangeEventHandler<HTMLInputElement> = ({target})=>{
-    const { name, value } = target;
-    
+    let { name, value } = target;
+
     if(value.length <= 3){
       setFormData({
        ...formData,
-        [name]: parseInt(value),
+        [name]: (value !== "") ? parseInt(value) : '',
       })
     }
   }
