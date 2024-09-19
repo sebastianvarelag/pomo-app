@@ -8,9 +8,6 @@ import { Button } from "./Button"
 import { Modal } from "./Modal"
 import { ModalSettingsContent } from "./ModalSettingsContent";
 import { PlayIcon } from "../../../public/icons/PlayIcon";
-import { ModalConfirmContent } from "./ModalConfirmContent";
-import { useAppDispatch } from "@/redux/hooks";
-import { setSkip } from "@/redux/features/timerSlice";
 
 interface controlsProps {
   ticking: boolean;
@@ -45,7 +42,7 @@ export const Controls = ({ticking, toggleTime}: controlsProps) => {
           <SkipIcon/>
         </Button>
       </div>
-      <Modal isVisible={showModal} title="Settings" onClose={() => setShowModal(false)}>
+      <Modal isVisible={showModal} title="Settings" onClose={() => setShowModal(false)} isConfirm={false}>
         <ModalSettingsContent onClose={() => setShowModal(false)}/>
       </Modal>
     </div>

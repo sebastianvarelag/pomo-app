@@ -1,6 +1,6 @@
 "use client";
 
-import { ChangeEventHandler, MouseEvent, useRef, useState } from "react"
+import { ChangeEventHandler, MouseEvent, useState } from "react"
 import { Switch } from "./Switch"
 import { useAppDispatch, useAppSelector } from "@/redux/hooks"
 import { setLongBreakInterval, toggleAutoBreak, toggleAutoPomo, updateTimeMode } from "@/redux/features/timerSlice";
