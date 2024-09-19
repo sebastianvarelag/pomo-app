@@ -19,7 +19,7 @@ const initialState = {
     "POMODORO":{
       id: "POMODORO",
       label: "Pomodoro",
-      sessionLength: 1
+      sessionLength: 25
     },
     "SHORT_BREAK":{
       id: "SHORT_BREAK",
