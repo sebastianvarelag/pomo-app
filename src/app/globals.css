@@ -46,6 +46,6 @@ body {
   }
 
   circle{
-    transition: stroke-dashoffset 1s linear;
+    transition: stroke-dashoffset .2s linear;
   }
 }
