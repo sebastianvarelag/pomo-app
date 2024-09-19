@@ -2,6 +2,7 @@
 
 import { ButtonHTMLAttributes, MouseEvent, useRef, useState } from "react";
 import { rippleEff } from "./ui/";
+import { useAudioPlayer } from "@/utils/sound";
 
 
 interface Props extends ButtonHTMLAttributes<HTMLButtonElement> {
@@ -11,15 +12,20 @@ interface Props extends ButtonHTMLAttributes<HTMLButtonElement> {
   toggleTime?: () => void;
 };
 
+
 export const Button = ({children, openModal, toggleTime}: Props) => {
   
   const buttonRef = useRef<HTMLButtonElement>(null)
   const rippleRef = useRef<HTMLSpanElement>(null)
 
+  const buttonSound = useAudioPlayer('/sounds/start.mp3');
+
   const [active, setActive] = useState(Boolean);
 
   const handleClick = (event: MouseEvent<HTMLButtonElement>) =>{
     event.preventDefault();
+  
+    buttonSound.play();
 
     if(openModal){
       openModal();

@@ -26,7 +26,7 @@ export default function useCountdown({minutes, onInit, onStop, onFinish} : props
       setTimeLeft(timeLeft - 1);
       setProgress((count) => count + 1); // Sum every second
     }
-    if(timeLeft < 1){
+    if(timeLeft <= 1){
       setTicking(false);
       setProgress(0);
       onFinish?.();
@@ -47,17 +47,17 @@ export default function useCountdown({minutes, onInit, onStop, onFinish} : props
     setTimeLeft(time);
   }, [time]);
 
-  const start = useCallback(() =>{
+  const startTicking = useCallback(() =>{
     setTicking(true);
     onInit?.();
   }, [onInit])
   
-  const stop = useCallback(() =>{
+  const stopTicking = useCallback(() =>{
     setTicking(false);
     onStop?.();
   }, [onStop])
 
-  const reset = useCallback(() =>{
+  const resetTicking = useCallback(() =>{
     setTicking(false);
     setProgress(0);
     setTimeLeft(time);
@@ -68,8 +68,8 @@ export default function useCountdown({minutes, onInit, onStop, onFinish} : props
     timeLeft,
     progress: progress / time,
     ticking,
-    start,
-    stop,
-    reset,
+    startTicking,
+    stopTicking,
+    resetTicking,
   }
 }

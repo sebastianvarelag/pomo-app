@@ -15,7 +15,6 @@ interface controlsProps {
 }
 
 export const Controls = ({ticking, toggleTime}: controlsProps) => {
-
   const [showModal, setShowModal] = useState(false)
 
   const openModal = () =>{

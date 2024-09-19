@@ -5,17 +5,28 @@ import useCountdown from "../../utils/useCountdown";
 import { secondsToMinutes } from "../../helpers/helpers";
 import { useCallback } from "react";
 import { incrementRound, incrementTotalRoundSessionInterval, resetRoundSessionInterval, setMode } from "@/redux/features/timerSlice";
+import { useAudioPlayer } from "@/utils/sound";
 
 export const Timer = () => {
 
 
   const { modes, mode, round, roundSessionInterval, longBreakInterval } = useAppSelector(state => state.timer);
   const dispatch = useAppDispatch();
-  
+
   const minutesMode = modes[mode as keyof typeof modes].sessionLength
 
-  const { ticking, progress, timeLeft, start, stop, reset} = useCountdown({
+  const tickingSound = useAudioPlayer('/sounds/ticking.mp3', true);
+  
+  const alarmSound = useAudioPlayer('/sounds/alarm.mp3', false);
+
+  const { ticking, progress, timeLeft, startTicking, stopTicking, resetTicking} = useCountdown({
     minutes: minutesMode,
+    onInit: () =>{
+      if(mode === 'POMODORO') tickingSound.play();
+    },
+    onStop: () =>{
+      if(mode === 'POMODORO') tickingSound.stop();
+    },
     onFinish: () => onFinishSessionMode(),
   });
 
@@ -25,12 +36,16 @@ export const Timer = () => {
     nextMode();
     switch(mode){
       case "POMODORO":
+        tickingSound.stop();
+        alarmSound.play();
         dispatch(incrementRound());
         break;
       case "SHORT_BREAK":
+        alarmSound.play();
         dispatch(incrementTotalRoundSessionInterval())
         break;
       case "LONG_BREAK":
+        alarmSound.play();
         dispatch(resetRoundSessionInterval());
         break;
     }
@@ -38,20 +53,18 @@ export const Timer = () => {
 
   const toggleTime = useCallback(() =>{
     if(!ticking){
-      start();
+      startTicking();
     } else {
-      stop();
+      stopTicking();
     }
-  }, [ticking, start, stop])
+  }, [ticking, startTicking, stopTicking])
 
   const jumpTo = useCallback((id:string) =>{
-    reset();
+    resetTicking();
     dispatch(setMode(id))
-  }, [dispatch, reset]);
+  }, [dispatch, resetTicking]);
 
   const nextMode = useCallback((modeSelected?: string) =>{
-    console.log(modeSelected);
-    
     switch(mode){
       case "SHORT_BREAK":
       case "LONG_BREAK":
