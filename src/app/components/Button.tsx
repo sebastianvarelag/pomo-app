@@ -3,6 +3,8 @@
 import { ButtonHTMLAttributes, MouseEvent, useRef, useState } from "react";
 import { rippleEff } from "./ui/";
 import { useAudioPlayer } from "@/utils/sound";
+import { setSkip } from "@/redux/features/timerSlice";
+import { useAppDispatch } from "@/redux/hooks";
 
 
 interface Props extends ButtonHTMLAttributes<HTMLButtonElement> {
@@ -10,11 +12,14 @@ interface Props extends ButtonHTMLAttributes<HTMLButtonElement> {
   bgColor?: string;
   openModal?: () => void;
   toggleTime?: () => void;
+  isConfirm?: boolean;
 };
 
 
-export const Button = ({children, openModal, toggleTime}: Props) => {
+export const Button = ({children, openModal, toggleTime, isConfirm}: Props) => {
   
+  const dispatch = useAppDispatch()
+
   const buttonRef = useRef<HTMLButtonElement>(null)
   const rippleRef = useRef<HTMLSpanElement>(null)
 
@@ -33,6 +38,10 @@ export const Button = ({children, openModal, toggleTime}: Props) => {
     
     if(toggleTime){
       toggleTime();
+    }
+
+    if(isConfirm){
+      dispatch(setSkip(null));
     }
 
     const ripple = rippleEff({buttonRef, rippleRef, event});
