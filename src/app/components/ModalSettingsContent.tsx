@@ -2,7 +2,6 @@
 
 import { ChangeEventHandler, MouseEvent, useRef, useState } from "react"
 import { Switch } from "./Switch"
-import { rippleEff } from "./ui/"
 import { useAppDispatch, useAppSelector } from "@/redux/hooks"
 import { setLongBreakInterval, toggleAutoBreak, toggleAutoPomo, updateTimeMode } from "@/redux/features/timerSlice";
 
@@ -24,11 +23,6 @@ export const ModalSettingsContent = ({onClose}: propsModal) => {
   const {POMODORO, SHORT_BREAK, LONG_BREAK} = modes;
   const dispatch = useAppDispatch();
   
-  const buttonRef = useRef<HTMLButtonElement>(null)
-  const rippleRef = useRef<HTMLSpanElement>(null)
-
-  const [activeButton, setActiveButton] = useState(false)
-
   const [formData, setFormData] = useState({
     pomodoroTime: POMODORO.sessionLength,
     shortBreakTime: SHORT_BREAK.sessionLength,
@@ -37,17 +31,6 @@ export const ModalSettingsContent = ({onClose}: propsModal) => {
     autoPomodoroCheck: autoPomodoro,
     autoBreakCheck: autoBreak,
   })
-
-  const rippleEffect = (event: MouseEvent<HTMLButtonElement>) =>{
-    const ripple = rippleEff({buttonRef, rippleRef, event});
-
-    if(ripple){
-      setActiveButton(true)
-      setTimeout(() => {
-        setActiveButton(false);
-      }, 600);
-    }
-  }
 
   const handleChangeInput: ChangeEventHandler<HTMLInputElement> = ({target})=>{
     let { name, value } = target;
@@ -97,10 +80,7 @@ export const ModalSettingsContent = ({onClose}: propsModal) => {
   const formIsValid = validateForm(formData);
 
   const handleClickOk = (event: MouseEvent<HTMLButtonElement>) =>{
-    event.preventDefault();
-    
-    rippleEffect(event);
-
+    event.preventDefault();    
     saveForm(formData);
   }
 
@@ -160,21 +140,12 @@ export const ModalSettingsContent = ({onClose}: propsModal) => {
           <Switch name="autoBreakCheck" isChecked={formData.autoBreakCheck} onChange={handleChangeCheck}/>
         </div>
         <div className="flex justify-end border-t-2 border-gray-300 mt-4 pt-4 text-white font-bold">
-        <button 
-          ref={buttonRef}
-          className={`h-12 bg-[#dc4f4f] px-6 hover:opacity-70 relative overflow-hidden${!formIsValid ? ' disabled-button' : ''}`}
-          onClick={handleClickOk}
-          >
-            OK
-            {
-              formIsValid ?
-              <span 
-              ref={rippleRef}
-              className={`absolute bg-white -translate-x-1/2 -translate-y-1/2 pointer-events-none rounded-[50%]${activeButton ? ' animate-rippleAnim' : ''}`}
-              ></span>
-              : ''
-            }
-        </button>
+          <button 
+            className={`h-12 bg-[#dc4f4f] px-6 hover:opacity-70 relative overflow-hidden${!formIsValid ? ' disabled-button' : ''}`}
+            onClick={handleClickOk}
+            >
+              OK
+            </button>
         </div>
       </form>
     </div>
