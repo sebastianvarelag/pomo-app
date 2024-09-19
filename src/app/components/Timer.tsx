@@ -3,15 +3,19 @@ import { Controls } from "./Controls"
 import { Menu } from "./Menu"
 import useCountdown from "../../utils/useCountdown";
 import { secondsToMinutes } from "../../helpers/helpers";
-import { useCallback, useEffect } from "react";
-import { incrementRound, incrementTotalRoundSessionInterval, resetRoundSessionInterval, setMode } from "@/redux/features/timerSlice";
+import { useCallback, useEffect, useState } from "react";
+import { incrementRound, incrementTotalRoundSessionInterval, resetRoundSessionInterval, setMode, setSkip } from "@/redux/features/timerSlice";
 import { useAudioPlayer } from "@/utils/sound";
+import { Modal } from "./Modal";
+import { ModalConfirmContent } from "./ModalConfirmContent";
 
 export const Timer = () => {
 
 
-  const { modes, mode, round, roundSessionInterval, longBreakInterval, autoPomodoro, autoBreak } = useAppSelector(state => state.timer);
+  const { modes, mode, round, roundSessionInterval, longBreakInterval, autoPomodoro, autoBreak, skip } = useAppSelector(state => state.timer);
   const dispatch = useAppDispatch();
+
+  const [showModalConfirm, setShowModalConfirm] = useState(false)
 
   const minutesMode = modes[mode as keyof typeof modes].sessionLength;
 
@@ -30,49 +34,27 @@ export const Timer = () => {
       onFinishSessionMode();
     },
   });
-
-  useEffect(() => {
-    resetTicking();
-  }, [minutesMode, resetTicking]);
-
+  
   const { minutesString, secondsString } = secondsToMinutes(timeLeft);
-
-  const onFinishSessionMode = () => {
-    switch (mode) {
-      case "POMODORO":
-        tickingSound.stop();
-        alarmSound.play();
-        dispatch(incrementRound());
-        break;
-      case "SHORT_BREAK":
-        alarmSound.play();
-        dispatch(incrementTotalRoundSessionInterval());
-        break;
-      case "LONG_BREAK":
-        alarmSound.play();
-        dispatch(resetRoundSessionInterval());
-        break;
-    }
-    nextMode(); 
-  };
-
-  const toggleTime = useCallback(() => {
+  
+  const toggleTime = () => {
     if (!ticking) {
       startTicking();
     } else {
       stopTicking();
     }
-  }, [ticking, startTicking, stopTicking]);
+  };
 
-  const jumpTo = useCallback((id: string) => {
-    resetTicking();
+  const jumpTo = (id: string) => {
+    resetTicking(); 
     dispatch(setMode(id));
-  }, [dispatch, resetTicking]);
-
+  };
+  
   const nextMode = useCallback((modeSelected?: string) => {
-    if (modeSelected !== undefined) {
-      jumpTo(modeSelected);
-    } else {
+    if (modeSelected !== undefined) 
+      if(timeLeft !== (minutesMode * 60) && !skip) dispatch(setSkip(null));
+      else jumpTo(modeSelected); 
+    else {
       switch (mode) {
         case "POMODORO":
           if (roundSessionInterval === longBreakInterval) {
@@ -92,6 +74,27 @@ export const Timer = () => {
     }
   }, [jumpTo, mode, longBreakInterval, roundSessionInterval]);
 
+  const onFinishSessionMode = () => {
+    switch (mode) {
+      case "POMODORO":
+        dispatch(incrementRound());
+        break;
+        case "SHORT_BREAK":
+        dispatch(incrementTotalRoundSessionInterval());
+        break;
+        case "LONG_BREAK":
+          dispatch(resetRoundSessionInterval());
+        break;
+      default:
+        alert('error');
+        break;
+    }
+
+    if(!skip) alarmSound.play();
+    nextMode(); 
+  };
+
+
   useEffect(() => {
     if (mode === "POMODORO" && autoPomodoro) {
       startTicking();
@@ -100,6 +103,24 @@ export const Timer = () => {
     }
   }, [mode, autoPomodoro, autoBreak, startTicking]);
 
+  useEffect(() => {
+    if (skip === null) {
+      stopTicking();
+      setShowModalConfirm(true);
+    }
+  }, [skip]);
+  
+  useEffect(() => {
+    if (skip === true) {
+      onFinishSessionMode();
+      dispatch(setSkip(false));
+    }
+  }, [skip]);
+
+  useEffect(() => {
+    resetTicking();
+    tickingSound.stop();
+  }, [minutesMode, resetTicking]);
 
   return (
     <div className="flex flex-col justify-center w-full h-full items-center">
@@ -117,6 +138,10 @@ export const Timer = () => {
       </div>
       <span className="relative bottom-8 text-2xl font-semibold opacity-70">#{(mode === 'POMODORO') ? round : (round !== 1) ? (round - 1) : '1'}</span>
       <Controls ticking={ticking} toggleTime={toggleTime}/>
+      
+      <Modal isVisible={showModalConfirm} isConfirm title="Confirm" onClose={() => setShowModalConfirm(false)}>
+        <ModalConfirmContent  onClose={() => setShowModalConfirm(false)}/>
+      </Modal>
     </div>
   )
 }
