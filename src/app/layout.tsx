@@ -1,6 +1,6 @@
 import "./globals.css";
 import { KoHo } from 'next/font/google'
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { StoreProvider } from "@/redux/StoreProvider";
 
 
@@ -8,6 +8,11 @@ export const metadata: Metadata = {
   title: "PomoApp",
   description: "Pomo timer for focusing",
 };
+
+export const viewport: Viewport = {
+  initialScale: 1,
+  width: 'device-width'
+}
 
 const koho = KoHo({
   weight: "200",
@@ -21,8 +26,8 @@ export default function RootLayout({
 }>) {
   return (
     <StoreProvider>  
-      <html lang="en" className={koho.className}>
-        <body>
+      <html lang="en">
+        <body className={koho.className}>
           {children}
         </body>
       </html>

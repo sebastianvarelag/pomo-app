@@ -120,25 +120,27 @@ export const Timer = () => {
   }, [mode, autoPomodoro, autoBreak]);
 
   return (
-    <div className="flex flex-col justify-center w-full h-full items-center">
-      <Menu onChangeMode={nextMode}/>
-      <div className="flex justify-center items-center min-w-[500px] min-h-[500px] bg-white/10 scale-50 sm:scale-75 md:scale-100 border-8 border-white/30 rounded-full relative sm:mb-16 md:mb-36">
-          <div className="flex justify-center items-center text-9xl select-none">
-            <span className="min-w-[160px] max-w-fit text-center">{minutesString}</span>
-            <span>:</span>
-            <span className="min-w-[160px] max-w-fit text-center">{secondsString}</span>
-          </div>
-          <svg className="absolute rotate-[270deg]" viewBox="0 0 90 90" height="600px" width="600px">
-          <defs></defs>
-          <circle r="38.9" cx="45" cy="45" fill="none" stroke="white" strokeLinecap="round" strokeWidth={2} strokeOpacity={1} strokeDasharray={244.4} strokeDashoffset={244.4 - (244.4 * progress)} transform="matrix(0.952228, 0, 0, 0.951022, 2.440749, 2.269741)"></circle>
-        </svg>
+    <div className="flex w-full min-h-screen">
+      <div className="flex flex-col justify-center w-full min-h-full items-center py-8">
+        <Menu onChangeMode={nextMode}/>
+        <div className="flex justify-center items-center min-w-[500px] min-h-[500px] bg-white/10 scale-50 sm:scale-75 md:scale-100 border-8 border-white/30 rounded-full relative sm:mb-16 md:mb-36">
+            <div className="flex justify-center items-center text-9xl select-none">
+              <span className="min-w-[160px] max-w-fit text-center">{minutesString}</span>
+              <span>:</span>
+              <span className="min-w-[160px] max-w-fit text-center">{secondsString}</span>
+            </div>
+            <svg className="absolute rotate-[270deg]" viewBox="0 0 90 90" height="600px" width="600px">
+            <defs></defs>
+            <circle r="38.9" cx="45" cy="45" fill="none" stroke="white" strokeLinecap="round" strokeWidth={2} strokeOpacity={1} strokeDasharray={244.4} strokeDashoffset={244.4 - (244.4 * progress)} transform="matrix(0.952228, 0, 0, 0.951022, 2.440749, 2.269741)"></circle>
+          </svg>
+        </div>
+        <span className="relative bottom-8 text-2xl font-semibold opacity-70">#{(mode === 'POMODORO') ? round : (round !== 1) ? (round - 1) : '1'}</span>
+        <Controls ticking={ticking} toggleTime={toggleTime}/>
+        
+        <Modal isVisible={showModalConfirm} isConfirm title="Confirm" onClose={() => setShowModalConfirm(false)}>
+          <ModalConfirmContent  onClose={() => setShowModalConfirm(false)}/>
+        </Modal>
       </div>
-      <span className="relative bottom-8 text-2xl font-semibold opacity-70">#{(mode === 'POMODORO') ? round : (round !== 1) ? (round - 1) : '1'}</span>
-      <Controls ticking={ticking} toggleTime={toggleTime}/>
-      
-      <Modal isVisible={showModalConfirm} isConfirm title="Confirm" onClose={() => setShowModalConfirm(false)}>
-        <ModalConfirmContent  onClose={() => setShowModalConfirm(false)}/>
-      </Modal>
     </div>
   )
 }
