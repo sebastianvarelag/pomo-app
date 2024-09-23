@@ -121,9 +121,9 @@ export const Timer = () => {
 
   return (
     <div className="flex w-full min-h-screen">
-      <div className="flex flex-col justify-center w-full min-h-full items-center py-8">
+      <div className="flex flex-col justify-center w-full min-h-full items-center py-8 md:gap-y-12">
         <Menu onChangeMode={nextMode}/>
-        <div className="flex justify-center items-center min-w-[500px] min-h-[500px] bg-white/10 scale-50 sm:scale-75 md:scale-100 border-8 border-white/30 rounded-full relative sm:mb-16 md:mb-36">
+        <div className="flex justify-center items-center min-w-[500px] min-h-[500px] bg-white/10 scale-50 sm:scale-75 md:scale-100 border-8 border-white/30 rounded-full relative sm:mb-16">
             <div className="flex justify-center items-center text-9xl select-none">
               <span className="min-w-[160px] max-w-fit text-center">{minutesString}</span>
               <span>:</span>
