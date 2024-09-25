@@ -52,4 +52,10 @@ body {
   .disabled-button{
     @apply cursor-not-allowed bg-gray-400
   }
+
+  .loader{
+    transform: translateZ(0) scale(1);
+    backface-visibility: hidden;
+    transform-origin: 0 0;
+  }
 }

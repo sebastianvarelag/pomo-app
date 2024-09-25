@@ -30,12 +30,21 @@ const config: Config = {
           "100%": {
             width: "300px",
             height: "300px",
-            opacity: "0"
+            background: "0"
           },
         },
+        loaderEffect:{
+          "0%":{
+            transform: "translate(-50%,-50%) rotate(0deg)"
+          },
+          "100%":{
+            transform: "translate(-50%,-50%) rotate(360deg)"
+          }
+        }
       },
       animation:{
-        "rippleAnim": "rippleEffect .9s linear infinite"
+        "rippleAnim": "rippleEffect .9s linear infinite",
+        "loader": "loaderEffect 1s linear infinite"
       }
     },
   },
